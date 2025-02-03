@@ -1,0 +1,19 @@
+{
+  "name": "doom-launcher",
+  "version": "1.0.0",
+  "description": "Mod launcher for everything doom-related",
+  "main": "./src/main/index.js",
+  "scripts": {
+    "test": "start"
+  },
+  "author": "Ratintosh",
+  "license": "ISC",
+  "dependencies": {
+    "configparser": "^0.3.9",
+    "glasstron": "^0.1.1",
+    "kaitai-struct": "^0.10.0",
+    "nlump": "^0.2.3",
+    "node-wad": "^0.2.6",
+    "nwad": "^0.2.1"
+  }
+}

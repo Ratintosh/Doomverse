@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>DoomHub</title>
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="wizard.css">
+    </head>
+    <body>
+        
+        <div id="title-bar">
+             <div id="title">
+                 <span style="vertical-align: middle;"><img src="https://raw.githubusercontent.com/zeke/atom-icon/master/old-icon/2.png" style="width:20px;height:20px;"/></span>
+             </div>
+             <div id="title-bar-btns">
+                <a id="min-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg></a>
+                <a id="max-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a>
+                <a id="close-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></a>
+             </div>
+        </div>
+        <div class="sidenav">
+            <a href="#"><img src="icons/clock.svg">Recently Played</a>
+            <a class="active" href="#"><img src="icons/apps.svg">All games</a>
+            <a href="#"><img src="icons/bookmark.svg">Doom I</a>
+            <a href="#"><img src="icons/bookmark.svg">Doom II</a>
+            <a href="#"><img src="icons/bookmark.svg">Final Doom</a>
+            <a href="#"><img src="icons/bookmark.svg">Plutonia</a>
+            <a href="#"><img src="icons/bookmark.svg">TNT</a>
+            
+          </div>
+          <div class="main">
+            <h2>All Games</h2>
+            <div id="grid" class="grid">
+                <div id="add-game" class="game">
+                    <div id="add" class="add">+</div>
+                </div>
+            </div>
+          </div>
+        <script>
+        (function () {
+            // Retrieve remote BrowserWindow
+            const {ipcRenderer} = require('electron');
+            function init() {
+                // Close app
+                document.getElementById("close-btn").addEventListener("click", (e) => {
+                    ipcRenderer.send('close-me')
+                });
+                document.getElementById("max-btn").addEventListener("click", (e) => {
+                    ipcRenderer.send('max-me')
+                });
+                document.getElementById("min-btn").addEventListener("click", (e) => {
+                    ipcRenderer.send('min-me')
+                });
+                document.getElementById("add").addEventListener("click", (e) => {
+                    let formInputs = document.querySelectorAll("input");
+                    console.log(formInputs);
+                    //document.getElementById("overlay").style.display = "block";
+                    ipcRenderer.send('requestWizard')
+                });
+            };
+
+            document.onreadystatechange =  () => {
+                if (document.readyState == "complete") {
+                    init();
+                }
+            };
+            ipcRenderer.on('clearLibrary', (event, data) => {
+                console.log("helloworld?")
+                var element = document.getElementById("grid"); 
+                while (element.firstChild.id != "add-game") { 
+                    element.firstChild.remove();
+                }
+            });
+            ipcRenderer.on('addgame', (event, data) => {
+                var game = document.createElement("div")
+                game.className = "game"
+                var image = document.createElement("img")
+                image.src = data.cover
+                game.appendChild(image)
+                var h3 = document.createElement("h3")
+                h3.innerHTML = data.name
+                var p = document.createElement("p")
+                p.innerHTML = data.author + ', ' + data.year
+                game.appendChild(h3)
+                game.appendChild(p)
+                game.addEventListener("click", launchGame); 
+                game.setAttribute("gameName",data.id)
+                document.getElementById("grid").insertBefore(game, document.getElementById("add-game"))
+            });
+
+            function launchGame(event){
+                gamename = event.currentTarget.getAttribute("gameName")
+                ipcRenderer.send('launchGame',gamename)
+            }
+            
+        
+        })();
+        </script>
+    </body>
+</html>

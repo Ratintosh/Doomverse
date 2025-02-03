@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>My Electron Frameless Window</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="wizard.css">
+</head>
+
+<body class="wizardContent">
+    <div class="titleStuffs" id="title-bar">
+        <div id="title">
+
+        </div>
+        <br>
+        <div class="navBar">
+            <div id="sourceportTab" class="navBarElement selected">
+                <object id="generalIcon" data="icons/wizard/gear.svg" type="image/svg+xml"></object>
+                <p>Source Ports</p>
+            </div>
+
+            <div id="iwadTab" class="navBarElement">
+                <object id="gameplayIcon" data="icons/wizard/gameplay.svg" type="image/svg+xml"></object>
+                <p>Base IWADS</p>
+            </div>
+        </div>
+        <div id="title-bar-btns">
+
+            <a id="close-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px"
+                    viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="feather feather-x">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg></a>
+        </div>
+    </div>
+    <div class="wizard">
+        <div class="wizardBody">
+            <h1 id="statusMsg" style="display:block;">Looking for IWADS and Source Ports...</h1>
+            <div id="sourceportBody" style="display: block;">
+                <h1>Source Ports</h1>
+                <p>Configure source ports</p>
+                <table id="sourceportsTable" name="sourceports" style="width:100%">
+                    <tr>
+                        <th>Name</th>
+                        <th>Path</th>
+                        <th>Valid</th>
+                    </tr>
+                    <tr>
+                        
+                    </tr>
+
+                </table>
+                <br>
+                <button id="addEntry">Add Source Port</button>
+            </div>
+
+            <div id="iwadBody" style="display: block;">
+                <h1>IWADS</h1>
+                <p>Configure base iwads</p>
+                <table id="iwadsTable" name="iwads" style="width:100%">
+                    <tr>
+                        <th>Name</th>
+                        <th>Path</th>
+                        <th>Valid</th>
+                    </tr>
+                    <tr>
+                    </tr>
+
+                </table>
+                <br>
+                <button id="addEntry">Add IWAD</button>
+            </div>
+        </div>
+        <button id="saveChanges">Save Changes</button>
+    </div>
+    <script>
+        (function () {
+            // Retrieve remote BrowserWindow
+            const { ipcRenderer } = require('electron');
+            var screen = 0
+            console.log("HELLO")
+
+            ipcRenderer.on('config', (event, data) => {
+                createTables(data)
+                document.getElementById("saveChanges").addEventListener("click", function () {
+                    ipcRenderer.send('submitConfigChanges', tmpCfg)
+                })
+                document.getElementById("statusMsg").style.display = "none";
+            });
+            async function createTables(data) {
+                console.log("creating tables")
+                var tmpCfg = data
+                for (tableName in data) {
+                    table = document.getElementById(tableName + "Table")
+                    for (entry in data[tableName]) {
+                        var row = table.insertRow(-1);
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+
+                        var label = document.createElement("input");
+                        label.setAttribute("type", "text");
+                        label.setAttribute("value", entry);
+
+                        var input = document.createElement("input");
+                        input.setAttribute("type", "text");
+                        input.setAttribute("value", "Click to set path...");
+                        input.setAttribute("for", tableName);
+
+                        cell1.appendChild(label)
+                        cell2.appendChild(input)
+                        cell3.innerHTML = "❌"
+                        if (data[tableName][entry] == null) {
+                            input.value = "Click to set path..."
+                            cell3.innerHTML = "❌"
+                        } else {
+                            input.value = data[tableName][entry]
+                            cell3.innerHTML = "✅"
+                        }
+                        input.addEventListener("click", async function () {
+                            var table = event.target.parentNode.parentNode.parentNode.parentNode.getAttribute("name")
+                            var row = event.target.parentNode.parentNode.children
+
+                            var labelElement = row.item(0).children.item(0);
+                            var inputElement = row.item(1).children.item(0);
+                            var validElement = row.item(2);
+                            console.log("[" + labelElement.value + "] Clicked")
+                            console.log("[" + labelElement.value + "] Sent file open dialog")
+                            console.log(inputElement.getAttribute("for"))
+                            ipcRenderer.send('chooseFile', {
+                                "value":labelElement.value, 
+                                "section":inputElement.getAttribute("for")
+                            })
+                        })
+                    }
+                }
+            }
+            ipcRenderer.on('updateConfigWizard', (event, data) => {
+                for(section in data){
+                    this.tableName = section + "Table"
+                    var rows = document.getElementById(tableName).rows;
+                    console.log(rows)
+                    var i = rows.length;
+                    while (--i) {
+                        rows[i].parentNode.removeChild(rows[i]);
+                    }
+                }
+                createTables(data);
+            })
+            document.onreadystatechange = () => {
+                if (document.readyState == "complete") {
+                    ipcRenderer.send('requestConfig', [])
+                }
+            };
+        })();
+    </script>
+</body>
+
+</html>

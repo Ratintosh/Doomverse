@@ -1,0 +1,38 @@
+const fs = require( 'fs' )
+const app = require('electron');
+
+const profiles = require(profilesName);
+
+exports.initLibrary()
+
+exports.getLibrary = function () {
+    let rawdata = fs.readFileSync('profiles.json'); //config file location! change when done developing
+    let data = JSON.parse(rawdata);
+    return data;
+}
+
+exports.updateLibrary = function (window) {
+    let data = this.getLibrary()
+    for(i in data){
+        var tmp={
+            name:   data[i].metadata.name,
+            author: data[i].metadata.author,
+            year:   data[i].metadata.year,
+            cover:  data[i].metadata.grid,
+            id: i
+        }
+        window.webContents.send('addgame', tmp);
+    }
+    return null;
+}
+
+exports.addToLibrary = function (gameData, window) {
+    uniqueID = Date.now()
+    let keyObject = {}
+    keyObject[uniqueID] = gameData
+    let tmp = Object.assign(profiles, keyObject)
+    fs.writeFile(profilesName, JSON.stringify(tmp, null, 4), (err) => {
+        this.updateLibrary(window)
+        return true;
+    });
+}
