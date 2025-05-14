@@ -3,39 +3,104 @@
     <head>
         <meta charset="utf-8">
         <title>DoomHub</title>
-        <link rel="stylesheet" href="main.css">
-        <link rel="stylesheet" href="wizard.css">
-    </head>
-    <body>
         
-        <div id="title-bar">
-             <div id="title">
-                 <span style="vertical-align: middle;"><img src="https://raw.githubusercontent.com/zeke/atom-icon/master/old-icon/2.png" style="width:20px;height:20px;"/></span>
-             </div>
-             <div id="title-bar-btns">
-                <a id="min-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg></a>
-                <a id="max-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a>
-                <a id="close-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></a>
-             </div>
-        </div>
-        <div class="sidenav">
-            <a href="#"><img src="icons/clock.svg">Recently Played</a>
-            <a class="active" href="#"><img src="icons/apps.svg">All games</a>
-            <a href="#"><img src="icons/bookmark.svg">Doom I</a>
-            <a href="#"><img src="icons/bookmark.svg">Doom II</a>
-            <a href="#"><img src="icons/bookmark.svg">Final Doom</a>
-            <a href="#"><img src="icons/bookmark.svg">Plutonia</a>
-            <a href="#"><img src="icons/bookmark.svg">TNT</a>
-            
-          </div>
-          <div class="main">
-            <h2>All Games</h2>
-            <div id="grid" class="grid">
-                <div id="add-game" class="game">
-                    <div id="add" class="add">+</div>
+        <!-- Add Tailwind CSS via CDN for quick implementation -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            doom: {
+                                red: '#a02c2c',
+                                dark: '#1a1a1a',
+                                light: '#f5f5f5'
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body class="bg-doom-dark text-doom-light flex flex-col h-screen overflow-hidden">
+        
+        <!-- Title bar with custom styling - keeping your controls intact -->
+
+        
+        <!-- Main content area with sidebar and game grid -->
+        <div class="flex flex-1 overflow-hidden">
+            <!-- Sidebar navigation -->
+            <div class="sidenav w-64 bg-gray-900 flex-shrink-0 overflow-y-auto">
+                <div class="p-4">
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium text-gray-400 uppercase mb-2">Library</h3>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Recently Played
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 bg-doom-red text-white">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                            </svg>
+                            All Games
+                        </a>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-400 uppercase mb-2">Game Series</h3>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                            Doom I
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                            Doom II
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                            Final Doom
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                            Plutonia
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                            TNT
+                        </a>
+                    </div>
                 </div>
             </div>
-          </div>
+            
+            <!-- Main content area -->
+            <div class="main flex-1 overflow-y-auto p-6 bg-gray-800">
+                <h2 class="text-2xl font-bold mb-6 text-doom-light">All Games</h2>
+                
+                <!-- Game grid -->
+                <div id="grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+                    <!-- Game cards will be inserted here dynamically -->
+                    
+                    <!-- Add game button -->
+                    <div id="add-game" class="game bg-gray-900 hover:bg-gray-700 border border-gray-700 hover:border-doom-red rounded-lg cursor-pointer transition-all duration-300 flex items-center justify-center h-72">
+                        <div id="add" class="add text-6xl text-doom-red">+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script>
         (function () {
             // Retrieve remote BrowserWindow
@@ -51,7 +116,7 @@
                 document.getElementById("min-btn").addEventListener("click", (e) => {
                     ipcRenderer.send('min-me')
                 });
-                document.getElementById("add").addEventListener("click", (e) => {
+                document.getElementById("add-game").addEventListener("click", (e) => {
                     let formInputs = document.querySelectorAll("input");
                     console.log(formInputs);
                     //document.getElementById("overlay").style.display = "block";
@@ -59,41 +124,63 @@
                 });
             };
 
-            document.onreadystatechange =  () => {
+            document.onreadystatechange = () => {
                 if (document.readyState == "complete") {
                     init();
                 }
             };
+            
             ipcRenderer.on('clearLibrary', (event, data) => {
-                console.log("helloworld?")
+                console.log("Clearing library");
                 var element = document.getElementById("grid"); 
-                while (element.firstChild.id != "add-game") { 
+                while (element.firstChild && element.firstChild.id != "add-game") { 
                     element.firstChild.remove();
                 }
             });
+            
             ipcRenderer.on('addgame', (event, data) => {
-                var game = document.createElement("div")
-                game.className = "game"
-                var image = document.createElement("img")
-                image.src = data.cover
-                game.appendChild(image)
-                var h3 = document.createElement("h3")
-                h3.innerHTML = data.name
-                var p = document.createElement("p")
-                p.innerHTML = data.author + ', ' + data.year
-                game.appendChild(h3)
-                game.appendChild(p)
-                game.addEventListener("click", launchGame); 
-                game.setAttribute("gameName",data.id)
-                document.getElementById("grid").insertBefore(game, document.getElementById("add-game"))
+                // Create a game card with Tailwind styling
+                var game = document.createElement("div");
+                game.className = "game bg-gray-900 border border-gray-700 hover:border-doom-red rounded-lg overflow-hidden transition-all duration-300 cursor-pointer transform hover:scale-105 flex flex-col h-72";
+                game.setAttribute("gameName", data.id);
+                
+                // Cover image with proper aspect ratio
+                var imageContainer = document.createElement("div");
+                imageContainer.className = "w-full h-52 overflow-hidden bg-black flex items-center justify-center";
+                
+                var image = document.createElement("img");
+                image.src = data.cover;
+                image.className = "object-cover w-full h-full";
+                imageContainer.appendChild(image);
+                game.appendChild(imageContainer);
+                
+                // Game info section
+                var infoContainer = document.createElement("div");
+                infoContainer.className = "p-3 flex-1 flex flex-col";
+                
+                var h3 = document.createElement("h3");
+                h3.innerHTML = data.name;
+                h3.className = "text-sm font-bold truncate";
+                
+                var p = document.createElement("p");
+                p.innerHTML = data.author + ', ' + data.year;
+                p.className = "text-xs text-gray-400 mt-1";
+                
+                infoContainer.appendChild(h3);
+                infoContainer.appendChild(p);
+                game.appendChild(infoContainer);
+                
+                // Add click handler
+                game.addEventListener("click", launchGame);
+                
+                // Insert before the add button
+                document.getElementById("grid").insertBefore(game, document.getElementById("add-game"));
             });
 
             function launchGame(event){
-                gamename = event.currentTarget.getAttribute("gameName")
-                ipcRenderer.send('launchGame',gamename)
+                gamename = event.currentTarget.getAttribute("gameName");
+                ipcRenderer.send('launchGame', gamename);
             }
-            
-        
         })();
         </script>
     </body>
