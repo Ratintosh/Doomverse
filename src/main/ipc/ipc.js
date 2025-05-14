@@ -24,3 +24,12 @@ ipcMain.on('addGame', (evt, arg) => {
     window.webContents.send('clearLibrary');
     library.addToLibrary(arg, window);
 })
+
+ipcMain.on('closeConfigWindow', (event) => {
+    // Get the BrowserWindow that sent this message
+    const senderWindow = BrowserWindow.fromWebContents(event.sender);
+    
+    if (senderWindow) {
+        senderWindow.close();
+    }
+});
