@@ -1,6 +1,7 @@
 const {ipcMain, app, BrowserWindow, dialog} = require('electron')
 const path = require('path');
 const library = require('../library/library'); 
+const config = require('../config/config.js'); 
 const runner = require('../runner/runner.js');  
 const window = require('../window/window.js');
 
@@ -37,4 +38,30 @@ ipcMain.on('closeConfigWindow', (event) => {
     if (senderWindow) {
         senderWindow.close();
     }
+});
+
+ipcMain.on('getSourcePortOptions', (event) => {
+    const sourcePortOptions = [];
+    const sourcePorts = config.getConfig();
+    for ( i in sourcePorts.sourceports) {
+        const sourcePort = {
+            value: i,
+            text: i
+        };
+        sourcePortOptions.push(sourcePort);
+    }
+    event.sender.send('sourcePortOptions', sourcePortOptions);
+});
+
+ipcMain.on('getIWADOptions', (event) => {
+    const iwadOptions = [];
+    const cfg = config.getConfig();
+    for ( i in cfg.iwads) {
+        const iwad = {
+            value: i,
+            text: i
+        };
+        iwadOptions.push(iwad);
+    }
+    event.sender.send('IWADOptions', iwadOptions);
 });

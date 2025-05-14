@@ -30,10 +30,56 @@
         });
     }
 
+    function initSourcePortSelect() {
+        const sourcePortSelect = document.getElementById("sourceport");
+        ipcRenderer.send('getSourcePortOptions');
+        ipcRenderer.on('sourcePortOptions', (event, sourcePortOptions) => {
+            // Clear existing options
+            sourcePortSelect.innerHTML = '';
+
+            // Add default option
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "null";
+            defaultOption.textContent = "Select Source Port";
+            sourcePortSelect.appendChild(defaultOption);
+
+            // Populate select with options
+            sourcePortOptions.forEach(option => {
+                const opt = document.createElement("option");
+                opt.value = option.value;
+                opt.textContent = option.text;
+                sourcePortSelect.appendChild(opt);
+            });
+        });
+    }
+
+    function initIWADselect() {
+        const iwadSelect = document.getElementById("-iwad");
+        ipcRenderer.send('getIWADOptions');
+        ipcRenderer.on('IWADOptions', (event, IWADOptions) => {
+            // Clear existing options
+            iwadSelect.innerHTML = '';
+
+            //Add default option
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "null";
+            defaultOption.textContent = "Select IWAD";
+            iwadSelect.appendChild(defaultOption);
+
+            // Populate select with options
+            IWADOptions.forEach(option => {
+                const opt = document.createElement("option");
+                opt.value = option.value;
+                opt.textContent = option.text;
+                iwadSelect.appendChild(opt);
+            });
+        });
+    }
     function init() {
         // Initialize tab switching
         initTabs();
-
+        initSourcePortSelect();
+        initIWADselect()
         // Close button
         document.getElementById("close-btn").addEventListener("click", () => {
             window.close();
@@ -116,7 +162,7 @@
         tmp.opts["-width"] = document.getElementById("-width")?.value || "null";
         tmp.opts["-height"] = document.getElementById("-height")?.value || "null";
 
-        // Handle jump flags
+        // Handle other flags
         if (document.getElementById("jump") && document.getElementById("jump").checked) {
             tmp.opts.jumpFlags.enabled = true;
             tmp.opts.jumpFlags["-map"] = document.getElementById("-map").value;
