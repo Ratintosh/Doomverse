@@ -21,8 +21,13 @@ ipcMain.on('requestWizard', (evt, arg) => {
 
 
 ipcMain.on('addGame', (evt, arg) => {
-    window.webContents.send('clearLibrary');
-    library.addToLibrary(arg, window);
+    const mainWindow = BrowserWindow.getAllWindows().find(win => win !== BrowserWindow.fromWebContents(evt.sender));
+    
+    if (mainWindow) {
+        mainWindow.webContents.send('clearLibrary');
+    }
+
+    library.addToLibrary(arg, mainWindow);
 })
 
 ipcMain.on('closeConfigWindow', (event) => {
