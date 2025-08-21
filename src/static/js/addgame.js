@@ -1,3 +1,5 @@
+
+
 (function () {
     const { ipcRenderer } = require('electron');
 
@@ -94,6 +96,13 @@
             appendData();
             window.close();
         });
+
+        document.getElementById("fetchCover").addEventListener("click", () => {
+            console.log("HELLO?")
+            ipcRenderer.send('fetchGrid', document.getElementById("gameTitle").value);
+        });
+
+        
     }
 
     function appendData() {
@@ -182,4 +191,6 @@
             init();
         }
     };
+    
+
 })();
