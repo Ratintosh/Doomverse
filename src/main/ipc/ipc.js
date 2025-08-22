@@ -4,7 +4,6 @@ const library = require('../library/library');
 const config = require('../config/config.js'); 
 const runner = require('../runner/runner.js');  
 const window = require('../window/window.js');
-const gridAPI = require('../api/grid.js');
 
 ipcMain.on('close-me', (evt, arg) => {
     app.quit()
@@ -19,7 +18,6 @@ ipcMain.on('launchGame', (evt, gameID) => {
 
 ipcMain.on('requestWizard', (evt, arg) => {
     window.createWizardWindow()
-
 })
 
 
@@ -66,16 +64,4 @@ ipcMain.on('getIWADOptions', (event) => {
         iwadOptions.push(iwad);
     }
     event.sender.send('IWADOptions', iwadOptions);
-});
-
-ipcMain.on('fetchGrid', (event, gameTitle) => {
-    // Implement the logic to fetch the grid image using the gameTitle
-    console.log("Fetching grid for:", gameTitle);
-    
-
-    gridAPI.searchSteamGridDB(gameTitle).then(function(out){
-        console.log(out)
-    })
-    
-    event.sender.send('gridFetched', { imageUrl: 'path/to/grid/image.jpg' });
 });
