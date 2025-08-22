@@ -3,98 +3,213 @@
     <head>
         <meta charset="utf-8">
         <title>DoomHub</title>
-        <link rel="stylesheet" href="main.css">
-        <link rel="stylesheet" href="wizard.css">
-    </head>
-    <body>
         
-        <div id="title-bar">
-             <div id="title">
-                 <span style="vertical-align: middle;"><img src="https://raw.githubusercontent.com/zeke/atom-icon/master/old-icon/2.png" style="width:20px;height:20px;"/></span>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            doom: {
+                                red: '#a02c2c',
+                                dark: '#1a1a1a',
+                                light: '#f5f5f5'
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+        <style>
+            .slide-enter {
+                transform: translateX(100%);
+            }
+            .slide-enter-active {
+                transform: translateX(0);
+                transition: transform 0.3s ease-out;
+            }
+            .slide-exit {
+                transform: translateX(0);
+            }
+            .slide-exit-active {
+                transform: translateX(100%);
+                transition: transform 0.3s ease-in;
+            }
+        </style>
+    </head>
+    <body class="bg-doom-dark text-doom-light flex flex-col h-screen overflow-hidden">
+        
+        <!-- Title bar with custom styling -->
+        <div id="title-bar" class="flex justify-between items-center p-2 bg-doom-dark border-b border-gray-800 select-none">
+             <div id="title" class="flex items-center">
+                 <span class="flex items-center">
+                    <img src="icons/quake.svg" class="w-6 h-6 mr-2"/>
+                    <span class="text-doom-red font-bold">DoomVerse</span>
+                 </span>
              </div>
-             <div id="title-bar-btns">
-                <a id="min-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg></a>
-                <a id="max-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a>
-                <a id="close-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></a>
+             <div id="title-bar-btns" class="flex space-x-2">
+                <a id="min-btn" href="#" class="hover:bg-gray-700 p-1 rounded"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg></a>
+                <a id="max-btn" href="#" class="hover:bg-gray-700 p-1 rounded"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a>
+                <a id="close-btn" href="#" class="hover:bg-red-900 p-1 rounded"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></a>
              </div>
         </div>
-        <div class="sidenav">
-            <a href="#"><img src="icons/clock.svg">Recently Played</a>
-            <a class="active" href="#"><img src="icons/apps.svg">All games</a>
-            <a href="#"><img src="icons/bookmark.svg">Doom I</a>
-            <a href="#"><img src="icons/bookmark.svg">Doom II</a>
-            <a href="#"><img src="icons/bookmark.svg">Final Doom</a>
-            <a href="#"><img src="icons/bookmark.svg">Plutonia</a>
-            <a href="#"><img src="icons/bookmark.svg">TNT</a>
-            
-          </div>
-          <div class="main">
-            <h2>All Games</h2>
-            <div id="grid" class="grid">
-                <div id="add-game" class="game">
-                    <div id="add" class="add">+</div>
+        
+        <!-- Main content area with sidebar and game grid -->
+        <div class="flex flex-1 overflow-hidden">
+            <!-- Sidebar navigation -->
+            <div class="sidenav w-64 bg-gray-900 flex-shrink-0 overflow-y-auto">
+                <div class="p-4">
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium text-gray-400 uppercase mb-2">Library</h3>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Recently Played
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 bg-doom-red text-white">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                            </svg>
+                            All Games
+                        </a>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-400 uppercase mb-2">Game Series</h3>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                            Doom I
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                            Doom II
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                            Final Doom
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                            Plutonia
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-md mb-1 hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                            TNT
+                        </a>
+                    </div>
                 </div>
             </div>
-          </div>
-        <script>
-        (function () {
-            // Retrieve remote BrowserWindow
-            const {ipcRenderer} = require('electron');
-            function init() {
-                // Close app
-                document.getElementById("close-btn").addEventListener("click", (e) => {
-                    ipcRenderer.send('close-me')
-                });
-                document.getElementById("max-btn").addEventListener("click", (e) => {
-                    ipcRenderer.send('max-me')
-                });
-                document.getElementById("min-btn").addEventListener("click", (e) => {
-                    ipcRenderer.send('min-me')
-                });
-                document.getElementById("add").addEventListener("click", (e) => {
-                    let formInputs = document.querySelectorAll("input");
-                    console.log(formInputs);
-                    //document.getElementById("overlay").style.display = "block";
-                    ipcRenderer.send('requestWizard')
-                });
-            };
-
-            document.onreadystatechange =  () => {
-                if (document.readyState == "complete") {
-                    init();
-                }
-            };
-            ipcRenderer.on('clearLibrary', (event, data) => {
-                console.log("helloworld?")
-                var element = document.getElementById("grid"); 
-                while (element.firstChild.id != "add-game") { 
-                    element.firstChild.remove();
-                }
-            });
-            ipcRenderer.on('addgame', (event, data) => {
-                var game = document.createElement("div")
-                game.className = "game"
-                var image = document.createElement("img")
-                image.src = data.cover
-                game.appendChild(image)
-                var h3 = document.createElement("h3")
-                h3.innerHTML = data.name
-                var p = document.createElement("p")
-                p.innerHTML = data.author + ', ' + data.year
-                game.appendChild(h3)
-                game.appendChild(p)
-                game.addEventListener("click", launchGame); 
-                game.setAttribute("gameName",data.id)
-                document.getElementById("grid").insertBefore(game, document.getElementById("add-game"))
-            });
-
-            function launchGame(event){
-                gamename = event.currentTarget.getAttribute("gameName")
-                ipcRenderer.send('launchGame',gamename)
-            }
             
-        
-        })();
-        </script>
+            <!-- Main content area -->
+            <div id="main-container" class="flex-1 relative overflow-hidden">
+                <!-- Game grid view -->
+                <div id="grid-view" class="absolute inset-0 overflow-y-auto p-6 bg-gray-800 transition-all duration-300">
+                    <h2 class="text-2xl font-bold mb-6 text-doom-light">All Games</h2>
+                    
+                    <!-- Game grid -->
+                    <div id="grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+                        <!-- Game cards will be inserted here dynamically -->
+                        
+                        <!-- Add game button -->
+                        <div id="add-game" class="game bg-gray-900 hover:bg-gray-700 border border-gray-700 hover:border-doom-red rounded-lg cursor-pointer transition-all duration-300 flex items-center justify-center h-72">
+                            <div id="add" class="add text-6xl text-doom-red">+</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game detail view (initially hidden off-screen) -->
+                <div id="game-detail" class="absolute inset-0 bg-gray-900 translate-x-full transition-transform duration-300 overflow-y-auto">
+                    <!-- Back button -->
+                    <div class="bg-gray-800 p-4 sticky top-0 z-10 flex items-center">
+                        <button id="back-to-grid" class="flex items-center text-sm font-medium text-gray-300 hover:text-white">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            Back to Library
+                        </button>
+                    </div>
+                    
+                    <!-- Game banner/hero image -->
+                    <div id="game-banner" class="relative h-64 bg-gradient-to-b from-gray-800 to-gray-900 overflow-hidden">
+                        <div class="absolute inset-0 bg-center bg-cover opacity-50" id="game-banner-bg"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900"></div>
+                        <div class="absolute bottom-0 left-0 p-6 flex items-end">
+                            <img id="game-cover" class="w-32 h-40 object-cover rounded-md shadow-lg border border-gray-700" src="" alt="">
+                            <div class="ml-5">
+                                <h1 id="game-title" class="text-3xl font-bold text-white"></h1>
+                                <p id="game-info" class="text-gray-300 mt-1"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Game actions -->
+                    <div class="px-6 py-4 border-b border-gray-800 flex space-x-4">
+                        <button id="play-game" class="px-6 py-2 bg-doom-red text-white font-medium rounded hover:bg-red-800 transition-colors flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Play
+                        </button>
+                        <button id="configure-game" class="px-6 py-2 bg-gray-700 text-white font-medium rounded hover:bg-gray-600 transition-colors flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Configure
+                        </button>
+                    </div>
+                    
+                    <!-- Game details -->
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">About</h3>
+                        <p id="game-description" class="text-gray-300 mb-6">
+                            Game description will be loaded dynamically.
+                        </p>
+                        
+                        <!-- Screenshots section -->
+                        <h3 class="text-xl font-bold mb-3">Screenshots</h3>
+                        <div id="screenshots" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-gray-800 h-40 rounded animate-pulse"></div>
+                            <div class="bg-gray-800 h-40 rounded animate-pulse"></div>
+                            <div class="bg-gray-800 h-40 rounded animate-pulse"></div>
+                        </div>
+                        
+                        <!-- Technical details -->
+                        <h3 class="text-xl font-bold mb-3">Technical Information</h3>
+                        <div class="bg-gray-800 rounded p-4">
+                            <table class="w-full text-sm">
+                                <tr>
+                                    <td class="py-1 text-gray-400">Source Port:</td>
+                                    <td id="game-sourceport" class="py-1">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1 text-gray-400">Base Game:</td>
+                                    <td id="game-iwad" class="py-1">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1 text-gray-400">Launch Parameters:</td>
+                                    <td id="game-params" class="py-1 font-mono text-xs">-</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/library.js"></script>
     </body>
 </html>

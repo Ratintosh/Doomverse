@@ -3,448 +3,348 @@
 
 <head>
     <meta charset="utf-8">
-    <title>My Electron Frameless Window</title>
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="wizard.css">
+    <title>Add Game - DoomVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        doom: {
+                            red: '#a02c2c',
+                            dark: '#00000',
+                            light: '#f5f5f5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .slide-enter {
+            transform: translateX(100%);
+        }
+
+        .slide-enter-active {
+            transform: translateX(0);
+            transition: transform 0.3s ease-out;
+        }
+
+        .slide-exit {
+            transform: translateX(0);
+        }
+
+        .slide-exit-active {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in;
+        }
+    </style>
 </head>
 
-<body class="wizardContent">
-    <div class="titleStuffs" id="title-bar">
-        <div id="title">
-
+<body class="bg-doom-dark text-doom-light">
+    <div class="border-b border-gray-800 bg-doom-dark flex justify-between items-center p-3">
+        <div class="flex items-center">
+            <h1 class="text-xl font-bold">Add Game</h1>
         </div>
-        <br>
-        <div class="navBar">
-            <div id="generalTab" class="navBarElement selected">
-                <object id="generalIcon" data="icons/wizard/gear.svg" type="image/svg+xml"></object>
-                <p>General</p>
-            </div>
-            <div id="videoTab" class="navBarElement">
-                <object id="videoIcon" data="icons/wizard/video.svg" type="image/svg+xml"></object>
-                <p>Video</p>
-            </div>
-            <div id="audioTab" class="navBarElement">
-                <object id="audioIcon" data="icons/wizard/audio.svg" type="image/svg+xml"></object>
-                <p>Audio</p>
-            </div>
-            <div id="gameplayTab" class="navBarElement">
-                <object id="gameplayIcon" data="icons/wizard/gameplay.svg" type="image/svg+xml"></object>
-                <p>Gameplay</p>
-            </div>
-            <div id="advancedTab" class="navBarElement">
-                <object id="advancedIcon" data="icons/wizard/advanced.svg" type="image/svg+xml"></object>
-                <p>Advanced</p>
-            </div>
-        </div>
-        <div id="title-bar-btns">
-
-            <a id="close-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px"
-                    viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" class="feather feather-x">
+        <div>
+            <button id="close-btn" class="hover:bg-red-900 p-1 rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none"
+                    stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg></a>
+                </svg>
+            </button>
         </div>
     </div>
-    <div class="wizard">
-        <div class="wizardBody">
-            <div id="generalBody" style="display: block;">
-                <h1>General</h1>
-                <p>Configure information</p>
-                <div class="panel">
-                    <div class="inputRow">
-                        <div>
-                            <p>Name</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input value="Doom 2" id="gameTitle">
-                        </div>
-                    </div>
-                    <div class="inputRow">
-                        <div>
-                            <p>Author</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input value="ID Software" id="gameAuthor">
-                        </div>
-                    </div>
-                    <div class="inputRow">
-                        <div>
-                            <p>Year</p>
-                            <p class="subtext">(Optional)</p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input value="1996" id="gameYear">
-                        </div>
-                    </div>
-                    <div class="inputRow">
-                        <div>
-                            <p>Base Game</p>
-                            <p class="subtext">(Optional)</p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <select name="-iwad" id="-iwad">
-                                <option value="doom.wad">Doom 1 (Not Found)</option>
-                                <option value="doom2.wad">Doom 2 (Not Found)</option>
-                                <option value="custom">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="inputRow">
-                        <div>
-                            <p>Source Port</p>
-                            <p class="subtext">If your desired source port isn't showing up, make sure it is installed properly.</p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <select name="sourceport" id="sourceport">
-                                <option value="gzdoom">GZDoom</option>
-                                <option value="prboom">PrBoom+</option>
-                                <option value="chocolatedoom">Chocolate Doom</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div id="videoBody" style="display: none;">
-                <h1>Video</h1>
-                <p>Configure video settings</p>
-                <div class="panel">
-                    <div class="inputRow">
-                        <div>
-                            <p>Launch Fullscreen</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input type="checkbox" id="+fullscreen" name="+fullscreen">
-                        </div>
-                    </div>
-                    
-                    <div class="inputRow">
-                        <div>
-                            <p>Render Mode</p>
-                            <p class="subtext">Chooses which rendering API to use. If unsure, use OpenGL</p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <select name="+vid_rendermode" id="+vid_rendermode">
-                                <option value="r_opengl">OpenGL</option>
-                                <option value="r_vulkan">Vulkan</option>
-                                <option value="r_software">Software</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Main content -->
+    <div class="flex h-[calc(100vh-56px)]">
+        <!-- Sidebar navigation -->
+        <div class="w-52 bg-gray-900 border-r border-gray-800">
+            <nav class="flex flex-col p-4">
+                <button id="generalTab" class="tab-btn flex items-center space-x-3 px-3 py-2 mb-2 rounded-md bg-doom-red text-white">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.379.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.379-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>General</span>
+                </button>
 
-            <div id="audioBody" style="display: none;">
-                <h1>Audio</h1>
-                <p>Configure audio settings</p>
-                <div class="panel">
-                    <div class="inputRow">
-                        <div>
-                            <p>Disable All Sounds</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input type="checkbox" id="-nosound" name="-nosound" value="-nosound">
-                        </div>
-                    </div>
-                    <div class="inputRow">
-                        <div>
-                            <p>Disable Sound Effects</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input type="checkbox" id="-nosfx" name="-nosfx" value="-nosfx">
-                        </div>
-                    </div>
-                    <div class="inputRow">
-                        <div>
-                            <p>Disable Music</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input type="checkbox" id="-nomusic" name="-nomusic" value="-nomusic">
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <button id="videoTab" class="tab-btn flex items-center space-x-3 px-3 py-2 mb-2 rounded-md text-gray-300 hover:bg-gray-800">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                    <span>Video</span>
+                </button>
 
-            <div id="gameplayBody" style="display: none;">
-                <h1>Gameplay</h1>
-                <p>Configure gameplay flags</p>
-                <div class="panel">
-                    <div class="inputRow">
-                        <div>
-                            <p>Disable Monsters</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input type="checkbox" id="-nomonsters" name="-nomonsters">
-                        </div>
-                    </div>
-                    <div class="inputRow">
-                        <div>
-                            <p>Fast Monsters</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input type="checkbox" id="-fast" name="-fast">
-                        </div>
-                    </div>
-                    <div class="inputRow">
-                        <div>
-                            <p>Respawning Monsters</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input type="checkbox" id="-respawn" name="-respawn">
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <button id="audioTab" class="tab-btn flex items-center space-x-3 px-3 py-2 mb-2 rounded-md text-gray-300 hover:bg-gray-800">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+                    </svg>
+                    <span>Audio</span>
+                </button>
 
-            <div id="advancedBody" style="display: none;">
-                <h1>Advanced</h1>
-                <p>Add custom launch args</p>
-                <div class="panel">
-                    <div class="inputRow">
-                        <div>
-                            <p>Name</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input value="Doom 2" id="gameTitle">
-                        </div>
-                    </div>
-                    <div class="inputRow">
-                        <div>
-                            <p>Author</p>
-                            <p class="subtext"></p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input value="ID Software" id="gameTitle">
-                        </div>
-                    </div>
-                    <div class="inputRow">
-                        <div>
-                            <p>Year</p>
-                            <p class="subtext">(Optional)</p>
-                        </div>
-                        <div style="padding:0; margin:0;">
-                            <input value="1996" id="gameTitle">
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <button id="gameplayTab" class="tab-btn flex items-center space-x-3 px-3 py-2 mb-2 rounded-md text-gray-300 hover:bg-gray-800">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z" />
+                    </svg>
+                    <span>Gameplay</span>
+                </button>
 
-
+                <button id="advancedTab" class="tab-btn flex items-center space-x-3 px-3 py-2 mb-2 rounded-md text-gray-300 hover:bg-gray-800">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z" />
+                    </svg>
+                    <span>Advanced</span>
+                </button>
+            </nav>
         </div>
-    <button id="submitConfig">Submit</button>
+
+        <!-- Main form area -->
+        <div class="flex-1 overflow-y-auto p-6">
+            <!-- General settings -->
+            <div id="generalBody" class="tab-content">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-1">General Settings</h2>
+                    <p class="text-gray-400 text-sm">Configure basic game information</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Game Name</label>
+                            <input id="gameTitle" type="text" value="Doom 2"
+                                class="w-full bg-gray-800 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Author</label>
+                            <input id="gameAuthor" type="text" value="ID Software"
+                                class="w-full bg-gray-800 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Year <span class="text-gray-500">(Optional)</span></label>
+                            <input id="gameYear" type="text" value="1996"
+                                class="w-full bg-gray-800 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Cover Image</label>
+                            <div class="flex">
+                                <input id="coverImage" type="text" placeholder="Path to cover image (optional)"
+                                    class="flex-1 bg-gray-800 text-white border border-gray-700 rounded-l-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                                <button class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-r-md">
+                                    Browse
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Base Game (IWAD)</label>
+                            <select id="-iwad"
+                                class="w-full bg-gray-800 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Source Port</label>
+                            <select id="sourceport"
+                                class="w-full bg-gray-800 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                                
+                            </select>
+                            <p class="mt-1 text-xs text-gray-500">If your desired source port isn't showing up, make sure it is installed and configured with Doomverse.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video settings -->
+            <div id="videoBody" class="hidden tab-content">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-1">Video Settings</h2>
+                    <p class="text-gray-400 text-sm">Configure how the game is displayed</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="+fullscreen" name="+fullscreen"
+                            class="w-4 h-4 bg-gray-800 border-gray-700 rounded text-doom-red focus:ring-doom-red focus:ring-opacity-25">
+                        <label class="ml-2 block text-sm text-gray-300">Launch in Fullscreen</label>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Render Mode</label>
+                        <select id="+vid_rendermode"
+                            class="w-full md:w-1/2 bg-gray-800 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                            <option value="r_opengl">OpenGL</option>
+                            <option value="r_vulkan">Vulkan</option>
+                            <option value="r_software">Software</option>
+                        </select>
+                        <p class="mt-1 text-xs text-gray-500">Chooses which rendering API to use. If unsure, use OpenGL.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Width <span class="text-gray-500">(Optional)</span></label>
+                            <input id="-width" type="number" placeholder="e.g. 1920"
+                                class="w-full bg-gray-800 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Height <span class="text-gray-500">(Optional)</span></label>
+                            <input id="-height" type="number" placeholder="e.g. 1080"
+                                class="w-full bg-gray-800 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audio settings -->
+            <div id="audioBody" class="hidden tab-content">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-1">Audio Settings</h2>
+                    <p class="text-gray-400 text-sm">Configure sound options</p>
+                </div>
+
+                <div class="space-y-4 bg-gray-800 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="-nosound" name="-nosound"
+                            class="w-4 h-4 bg-gray-700 border-gray-600 rounded text-doom-red focus:ring-doom-red focus:ring-opacity-25">
+                        <label class="ml-2 block text-sm text-gray-300">Disable All Sounds</label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="checkbox" id="-nosfx" name="-nosfx"
+                            class="w-4 h-4 bg-gray-700 border-gray-600 rounded text-doom-red focus:ring-doom-red focus:ring-opacity-25">
+                        <label class="ml-2 block text-sm text-gray-300">Disable Sound Effects</label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="checkbox" id="-nomusic" name="-nomusic"
+                            class="w-4 h-4 bg-gray-700 border-gray-600 rounded text-doom-red focus:ring-doom-red focus:ring-opacity-25">
+                        <label class="ml-2 block text-sm text-gray-300">Disable Music</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gameplay settings -->
+            <div id="gameplayBody" class="hidden tab-content">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-1">Gameplay Settings</h2>
+                    <p class="text-gray-400 text-sm">Configure how the game behaves</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-gray-800 rounded-lg p-4 space-y-4">
+                        <h3 class="font-medium text-gray-200">Monster Behavior</h3>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="-nomonsters" name="-nomonsters"
+                                class="w-4 h-4 bg-gray-700 border-gray-600 rounded text-doom-red focus:ring-doom-red focus:ring-opacity-25">
+                            <label class="ml-2 block text-sm text-gray-300">Disable Monsters</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="-fast" name="-fast"
+                                class="w-4 h-4 bg-gray-700 border-gray-600 rounded text-doom-red focus:ring-doom-red focus:ring-opacity-25">
+                            <label class="ml-2 block text-sm text-gray-300">Fast Monsters</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="-respawn" name="-respawn"
+                                class="w-4 h-4 bg-gray-700 border-gray-600 rounded text-doom-red focus:ring-doom-red focus:ring-opacity-25">
+                            <label class="ml-2 block text-sm text-gray-300">Respawning Monsters</label>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 rounded-lg p-4 space-y-4">
+                        <h3 class="font-medium text-gray-200">Quick Start Options</h3>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="jump" name="jump"
+                                class="w-4 h-4 bg-gray-700 border-gray-600 rounded text-doom-red focus:ring-doom-red focus:ring-opacity-25">
+                            <label class="ml-2 block text-sm text-gray-300">Jump to Specific Map</label>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">Map</label>
+                                <input id="-map" type="text" placeholder="e.g. E1M1 or MAP01"
+                                    class="w-full bg-gray-700 text-white border border-gray-600 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">Skill Level (1-5)</label>
+                                <select id="-skill"
+                                    class="w-full bg-gray-700 text-white border border-gray-600 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                                    <option value="1">1 - I'm too young to die</option>
+                                    <option value="2">2 - Hey, not too rough</option>
+                                    <option value="3" selected>3 - Hurt me plenty</option>
+                                    <option value="4">4 - Ultra-Violence</option>
+                                    <option value="5">5 - Nightmare!</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced settings -->
+            <div id="advancedBody" class="hidden tab-content">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-1">Advanced Settings</h2>
+                    <p class="text-gray-400 text-sm">Additional configuration options</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Custom Launch Parameters</label>
+                        <textarea id="custom" rows="3" placeholder="Enter additional command line parameters here..."
+                            class="w-full bg-gray-800 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent font-mono text-sm"></textarea>
+                        <p class="mt-1 text-xs text-gray-500">Parameters will be added exactly as entered. Separate with spaces.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Custom Configuration File</label>
+                        <div class="flex">
+                            <input id="-config" type="text" placeholder="Path to .cfg file (optional)"
+                                class="flex-1 bg-gray-800 text-white border border-gray-700 rounded-l-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-doom-red focus:border-transparent">
+                            <button class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-r-md">
+                                Browse
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Mods (WADs, PK3s)</label>
+                        <div class="bg-gray-800 border border-gray-700 rounded-md p-2 min-h-[100px]">
+                            <div class="flex justify-center items-center h-full text-gray-500">
+                                <p>No mods added. Click "Add Mod" to begin.</p>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <button class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 text-sm rounded-md">
+                                Add Mod
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <script>
-        (function () {
-            // Retrieve remote BrowserWindow
-            const { ipcRenderer } = require('electron');
-            var screen = 0
-            function clearNavBar() {
-                //remove selected from all elements
-                document.getElementById("generalTab").classList.remove("selected")
-                document.getElementById("videoTab").classList.remove("selected")
-                document.getElementById("audioTab").classList.remove("selected")
-                document.getElementById("gameplayTab").classList.remove("selected")
-                document.getElementById("advancedTab").classList.remove("selected")
 
-                //remove selected from all icons
-                document.getElementById("generalIcon").getSVGDocument().querySelectorAll(".navIcon")[0].classList.remove("selected")
-                document.getElementById("videoIcon").getSVGDocument().querySelectorAll(".navIcon")[0].classList.remove("selected")
-                document.getElementById("audioIcon").getSVGDocument().querySelectorAll(".navIcon")[0].classList.remove("selected")
-                document.getElementById("gameplayIcon").getSVGDocument().querySelectorAll(".navIcon")[0].classList.remove("selected")
-                document.getElementById("advancedIcon").getSVGDocument().querySelectorAll(".navIcon")[0].classList.remove("selected")
-            }
-            function clearPage(){
-                document.getElementById("generalBody").style.display = "none"
-                document.getElementById("videoBody").style.display = "none"
-                document.getElementById("audioBody").style.display = "none"
-                document.getElementById("gameplayBody").style.display = "none"
-                document.getElementById("advancedBody").style.display = "none"
-            }
-            function init() {
-                
-                document.getElementById("submitConfig").addEventListener("click", (e) => {
-                   appendData()
-                   window.close()
-                });
+    <!-- Footer with action buttons -->
+    <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 p-4 flex justify-end">
+        <button id="close-config-btn" class="bg-gray-700 hover:bg-gray-600 text-white px-5 py-2 rounded-md mr-2">
+            Cancel
+        </button>
+        <button id="submitConfig" class="bg-doom-red hover:bg-red-800 text-white px-5 py-2 rounded-md">
+            Add Game
+        </button>
+    </div>
 
-                document.getElementById("close-btn").addEventListener("click", (e) => {
-                    window.close()
-                });
-
-                //handle tabs
-                document.getElementById("generalTab").addEventListener("click", (e) => {
-                    clearNavBar()
-                    clearPage()
-                    document.getElementById("generalBody").style.display = "block"
-                    //add it back to the chosen one
-                    document.getElementById("generalTab").classList.add("selected")
-                    document.getElementById("generalIcon").getSVGDocument().querySelectorAll(".navIcon")[0].classList.add("selected")
-                })
-                document.getElementById("videoTab").addEventListener("click", (e) => {
-                    clearNavBar()
-                    clearPage()
-                    document.getElementById("videoBody").style.display = "block"
-                    //add it back to the chosen one
-                    document.getElementById("videoTab").classList.add("selected")
-                    document.getElementById("videoIcon").getSVGDocument().querySelectorAll(".navIcon")[0].classList.add("selected")
-                })
-                document.getElementById("audioTab").addEventListener("click", (e) => {
-                    clearNavBar()
-                    clearPage()
-                    document.getElementById("audioBody").style.display = "block"
-                    //add it back to the chosen one
-                    document.getElementById("audioTab").classList.add("selected")
-                    document.getElementById("audioIcon").getSVGDocument().querySelectorAll(".navIcon")[0].classList.add("selected")
-                })
-                document.getElementById("gameplayTab").addEventListener("click", (e) => {
-                    clearNavBar()
-                    clearPage()
-                    document.getElementById("gameplayBody").style.display = "block"
-                    //add it back to the chosen one
-                    document.getElementById("gameplayTab").classList.add("selected")
-                    document.getElementById("gameplayIcon").getSVGDocument().querySelectorAll(".navIcon")[0].classList.add("selected")
-                })
-                document.getElementById("advancedTab").addEventListener("click", (e) => {
-                    clearNavBar()
-                    clearPage()
-                    document.getElementById("advancedBody").style.display = "block"
-                    //add it back to the chosen one
-                    document.getElementById("advancedTab").classList.add("selected")
-                    document.getElementById("advancedIcon").getSVGDocument().querySelectorAll(".navIcon")[0].classList.add("selected")
-                })
-            };
-            function appendData() {
-                //when the submit button is clicked on the iwad wizard screen, it calls this function which creates a tmp json object w/ null values for everything.
-                //this function then goes one by one filling in information from the form.
-                var tmp = {
-                    "metadata": {
-                        "name": "null",
-                        "author": "null",
-                        "year": "null",
-                        "grid": "null"
-                    },
-                    "game": {
-                        "sourceport": "null",
-                        "-iwad": "null",
-                        "modded": "null",
-                        "mods": {},
-                        "-config": "null"
-                    },
-
-                    "opts": {
-
-                        "enableSounds": "null",
-                        "-nosound": "null",
-
-                        "-nosfx": "null",
-                        "-nomusic": "null",
-
-
-                        "-nomonsters": "null",
-                        "-fast": "null",
-                        "-respawn": "null",
-
-                        "-width": "null",
-                        "-height": "null",
-                        "+fullscreen": "null",
-                        "+vid_rendermode": "null",
-
-                        "custom": "null",
-                        "jumpFlags": {
-                            "enabled": "null",
-                            "-map": "null",
-                            "-skill": "null"
-                        }
-                    }
-
-                }
-                //so i made the opts not nested. basically you can access all the options through the opts object without having to go down an extra object depending on what the options were related to.
-                //this helps to mitigate issues i encountered trying to parse this recursively.
-                //tmp = tmp["TEST"]
-                console.log(tmp)
-                tmp["metadata"]["name"] = document.getElementById("gameTitle").value;
-                tmp["metadata"]["author"] = document.getElementById("gameAuthor").value;
-                tmp["metadata"]["year"] = document.getElementById("gameYear").value;
-                tmp["metadata"]["grid"] = "thumbs/unkown.jpg"
-
-                //get all inputs (it's missing the metadata info, because the title, year, and author uses span)
-                //also there are <select> tags for things like the dropdowns. Gotta add that in too.
-                var opts = document.querySelectorAll("input, select, span")
-
-
-                opts.forEach((element) => {
-                    if (element.type == "checkbox") {
-                        //these would be checkboxes for flags such as nomonsters and nosfx.
-                        if (element.checked) {
-                            if (tmp["opts"][element.id.toString()]) { //check to make sure the flags even exist. they should but this is a failsafe.i
-                                //set the flags to true
-                                tmp["opts"][element.id.toString()] = true
-
-
-                            } else {
-                                if (element.id.toString() == "jump") {
-                                    //fill out the configuration data for when the user wants to jump to a certain map
-
-                                    tmp["opts"]["jumpFlags"]["enabled"] = true
-                                    tmp["opts"]["jumpFlags"]["-map"] = document.getElementById("-map").value
-                                    tmp["opts"]["jumpFlags"]["-skill"] = document.getElementById("-skill").value
-
-                                } else {
-                                    console.log(tmp["opts"][element.id.toString()])
-                                    console.log("Uh oh. Cannot find " + element.id + " in the config.")
-                                }
-                            }
-                        }
-                    }
-                    if (element.type == "text") {
-                        //these would be text boxes, usually 
-                        if (element.value != "") {
-                            if (tmp["opts"][element.id.toString()]) {
-                                tmp["opts"][element.id.toString()] = element.value
-                            } else {
-                                //console.log("Uh oh. Cannot find " + element.id + " in the config.")
-                            }
-                            console.log(element.id + " " + element.value)
-                        } else {
-                            console.log("Nothing here... skipping")
-                        }
-                    }
-                    if (element.type == "radio") {
-                        console.log("Idk what  to do here.")
-                    }
-                    if (element.type == "select-one") {
-                        //these would be text boxes, usually 
-                        if (element.id == "sourceport") {
-                            tmp["game"]["sourceport"] = element.value
-                        }
-                        if (element.id == "-iwad") {
-                            tmp["game"]["-iwad"] = element.value
-                        }
-                    }
-                })
-
-                console.log(tmp)
-                ipcRenderer.send('addGame', tmp)
-            }
-
-            document.onreadystatechange = () => {
-                if (document.readyState == "complete") {
-                    init();
-                }
-            };
-        })();
-    </script>
+    <script src="js/addgame.js"></script>
 </body>
 
 </html>

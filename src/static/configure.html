@@ -4,69 +4,150 @@
 <head>
     <meta charset="utf-8">
     <title>Doomverse Configuration</title>
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="wizard.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        doom: {
+                            red: '#a02c2c',
+                            dark: '#1a1a1a',
+                            light: '#f5f5f5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
-<body class="wizardContent">
-    <div class="titleStuffs" id="title-bar">
-        <div id="title">Doomverse Configuration</div>
-        <br>
-        <div class="navBar">
-            <div id="sourceportTab" class="navBarElement selected">
-                <object id="generalIcon" data="icons/wizard/gear.svg" type="image/svg+xml"></object>
-                <p>Source Ports</p>
-            </div>
-
-            <div id="iwadTab" class="navBarElement">
-                <object id="gameplayIcon" data="icons/wizard/gameplay.svg" type="image/svg+xml"></object>
-                <p>Base IWADS</p>
-            </div>
+<body class="bg-doom-dark text-doom-light">
+    <!-- Title bar -->
+    <div class="border-b border-gray-800 bg-doom-dark flex justify-between items-center p-3">
+        <div class="flex items-center">
+            <h1 class="text-xl font-bold">Doomverse Configuration</h1>
         </div>
-        <div id="title-bar-btns">
-            <a id="close-btn" href="#"><svg class="ctrl" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px"
-                    viewBox="0 0 24 24" fill="none" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" class="feather feather-x">
+        <div>
+            <button id="close-btn" class="hover:bg-red-900 p-1 rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" fill="none" 
+                    stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg></a>
+                </svg>
+            </button>
         </div>
     </div>
-    <div class="wizard">
-        <div class="wizardBody">
-            <h1 id="statusMsg">Looking for IWADS and Source Ports...</h1>
-            <div id="sourceportBody" class="configSection">
-                <h1>Source Ports</h1>
-                <p>Configure source ports</p>
-                <table id="sourceportsTable" data-section="sourceports" style="width:100%">
-                    <tr>
-                        <th>Name</th>
-                        <th>Path</th>
-                        <th>Valid</th>
-                    </tr>
-                </table>
-                <br>
-                <button class="addEntryBtn" data-section="sourceports">Add Source Port</button>
+
+    <div class="flex h-[calc(100vh-56px)]">
+        <!-- Tab navigation sidebar -->
+        <div class="w-52 bg-gray-900 border-r border-gray-800">
+            <nav class="flex flex-col p-4">
+                <button id="sourceportTab" class="tab-btn flex items-center space-x-3 px-3 py-2 mb-2 rounded-md bg-doom-red text-white">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 13.5V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 9.75V16.5" />
+                    </svg>
+                    <span>Source Ports</span>
+                </button>
+
+                <button id="iwadTab" class="tab-btn flex items-center space-x-3 px-3 py-2 mb-2 rounded-md text-gray-300 hover:bg-gray-800">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                    </svg>
+                    <span>Base IWADS</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Main content area -->
+        <div class="flex-1 overflow-y-auto p-6">
+            <!-- Status message -->
+            <div id="statusMsg" class="text-xl font-bold mb-6 text-center py-4 bg-gray-800 rounded-lg">
+                Looking for IWADS and Source Ports...
             </div>
 
-            <div id="iwadBody" class="configSection" style="display: none;">
-                <h1>IWADS</h1>
-                <p>Configure base iwads</p>
-                <table id="iwadsTable" data-section="iwads" style="width:100%">
-                    <tr>
-                        <th>Name</th>
-                        <th>Path</th>
-                        <th>Valid</th>
-                    </tr>
-                </table>
-                <br>
-                <button class="addEntryBtn" data-section="iwads">Add IWAD</button>
+            <!-- Source Ports section -->
+            <div id="sourceportBody" class="configSection">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-1">Source Ports</h2>
+                    <p class="text-gray-400 text-sm">Configure source ports for launching your games</p>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg overflow-hidden mb-4">
+                    <table id="sourceportsTable" data-section="sourceports" class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-900 text-left">
+                                <th class="px-4 py-3 font-medium">Name</th>
+                                <th class="px-4 py-3 font-medium">Path</th>
+                                <th class="px-4 py-3 font-medium w-16 text-center">Valid</th>
+                                <th class="px-4 py-3 font-medium w-16 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Table rows will be inserted here by JS -->
+                            <tr class="border-t border-gray-700">
+                                <td colspan="4" class="px-4 py-3 text-gray-400 text-center">No source ports configured yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <button class="addEntryBtn bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md flex items-center space-x-2" data-section="sourceports">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span>Add Source Port</span>
+                </button>
+            </div>
+
+            <!-- IWADS section (initially hidden) -->
+            <div id="iwadBody" class="configSection hidden">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-1">Base IWADS</h2>
+                    <p class="text-gray-400 text-sm">Configure base game data files (IWADS)</p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg overflow-hidden mb-4">
+                    <table id="iwadsTable" data-section="iwads" class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-900 text-left">
+                                <th class="px-4 py-3 font-medium">Name</th>
+                                <th class="px-4 py-3 font-medium">Path</th>
+                                <th class="px-4 py-3 font-medium w-16 text-center">Valid</th>
+                                <th class="px-4 py-3 font-medium w-16 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Table rows will be inserted here by JS -->
+                            <tr class="border-t border-gray-700">
+                                <td colspan="4" class="px-4 py-3 text-gray-400 text-center">No IWADS configured yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <button class="addEntryBtn bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md flex items-center space-x-2" data-section="iwads">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span>Add IWAD</span>
+                </button>
             </div>
         </div>
-        <button id="saveChanges">Save Changes</button>
-        <button id="close-btn">Close</button>
+    </div>
+
+    <!-- Footer with action buttons -->
+    <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 p-4 flex justify-end">
+        <button id="close-btn-footer" class="bg-gray-700 hover:bg-gray-600 text-white px-5 py-2 rounded-md mr-2">
+            Cancel
+        </button>
+        <button id="saveChanges" class="bg-doom-red hover:bg-red-800 text-white px-5 py-2 rounded-md">
+            Save Changes
+        </button>
     </div>
 
     <script src="js/configure.js"></script>
 </body>
+
 </html>
