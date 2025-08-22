@@ -19,6 +19,7 @@
 
 const { app } = require('electron');
 const { createMainWindow, createConfigWindow } = require('./window/window.js');
+const { initLibrary } = require('./library/library.js');
 
 // IPC handlers
 require("./ipc/ipc");
@@ -53,6 +54,7 @@ app.once('ready', () => {
         Check for Updates: If your mod loader has an update system, notify the user about new versions.
         Show a Splash Screen: Optionally, display a loading animation while performing background tasks.
     */
-    createConfigWindow();
-    createMainWindow();
+        initLibrary()
+        createConfigWindow();
+        createMainWindow();
 });

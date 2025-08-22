@@ -7,6 +7,7 @@ const profilesPath = path.join(app.getPath('userData'), 'profiles.json');
 //init library
 function initLibrary() {
     const userDataPath = app.getPath('userData');
+    console.log(app.getPath('userData'))
     const libraryPath = path.join(userDataPath, 'library.json');
 
     try {
