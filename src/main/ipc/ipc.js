@@ -65,3 +65,26 @@ ipcMain.on('getIWADOptions', (event) => {
     }
     event.sender.send('IWADOptions', iwadOptions);
 });
+
+// IPC for file selection
+ipcMain.on('chooseFile', (event, elementData) => {
+    dialog.showOpenDialog({
+        properties: ['openFile']
+    }).then((data) => {
+        const { section, value } = elementData;
+        configData = getConfig(); // Reload config data
+        configData[section][value] = data.filePaths;
+        console.log(configData);
+        writeConfig(configData).then(() => {
+            event.sender.send('updateConfigWizard', configData);
+        });
+    });
+});
+
+// IPC for submitting config changes
+ipcMain.on('submitConfigChanges', (event, data) => {
+    console.log('Config changes:', data);
+    writeConfig(data).then(() => {
+        event.sender.send('configUpdated', data);
+    });
+});
