@@ -55,12 +55,44 @@ body {
 body {
     font-family: "Lato", sans-serif;
     font-weight: lighter;
+    color: var(--font-color);
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .main {
     font-size: 18px; /* Increased text to enable scrolling */
     padding: 0px 10px;
-    color: var(--font-color);
+    position:absolute;
+    width:100%;
+}
+
+.detailsPane {
+    display:none;
+    position:absolute;
+    background-color:black;
+    width:100%;
+    height:100%;
+    transform: translateX(100%);
+
+}
+
+.slide-in {
+    display:block;
+    animation: slide-in 0.5s forwards;
+    -webkit-animation: slide-in 0.5s forwards;
+}
+@keyframes slide-in {
+    100% { transform: translateX(0%); }
+}
+
+.slide-out {
+    display:none;
+    animation: slide-in 0.5s forwards;
+    -webkit-animation: slide-in 0.5s forwards;
+}
+@keyframes slide-out {
+    0% { transform: translateX(100%); }
 }
 
 

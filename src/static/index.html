@@ -1,101 +1,117 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>DoomHub</title>
-        <link rel="stylesheet" href="main.css">
-        <link rel="stylesheet" href="wizard.css">
-    </head>
-    <body>
-        <div class="main">
-            <h2>All Games</h2>
-            <div id="grid" class="grid">
-                <div id="add-game" class="game">
-                    <div id="add" class="add">+</div>
-                </div>
+
+<head>
+    <meta charset="utf-8">
+    <title>DoomHub</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="wizard.css">
+</head>
+
+<body>
+    <div class="main">
+        <h2>All Games</h2>
+        <div id="grid" class="grid">
+            <div id="add-game" class="game">
+                <div id="add" class="add">+</div>
             </div>
         </div>
-        <div class="detailsPane">
-            
-        </div>
-        <script>
-            (function () {
-                let cachedLibrary = {}
-                // Retrieve remote BrowserWindow
-                const {ipcRenderer} = require('electron');
-                function init() {
-                    document
-                        .getElementById("add")
-                        .addEventListener("click", (e) => {
-                            let formInputs = document.querySelectorAll("input");
-                            console.log(formInputs);
-                            //document.getElementById("overlay").style.display = "block";
-                            ipcRenderer.send('requestWizard')
-                        });
-                };
+    </div>
+    <div id="gameDetail" class="detailsPane">
+        <button id="return">AAA</button>
+        <h1>Hello world</h1>
+    </div>
+    <script>
+        (function () {
+            let cachedLibrary = {}
+            // Retrieve remote BrowserWindow
+            const { ipcRenderer } = require('electron');
+            function init() {
+                document
+                    .getElementById("add")
+                    .addEventListener("click", (e) => {
+                        let formInputs = document.querySelectorAll("input");
+                        console.log(formInputs);
+                        //document.getElementById("overlay").style.display = "block";
+                        ipcRenderer.send('requestWizard')
+                    });
+                document
+                    .getElementById("add")
+                    .addEventListener("click", (e) => {
+                        let formInputs = document.querySelectorAll("input");
+                        console.log(formInputs);
+                        //document.getElementById("overlay").style.display = "block";
+                        ipcRenderer.send('requestWizard')
+                    });
+            };
 
-                document.onreadystatechange = () => {
-                    if (document.readyState == "complete") {
-                        init();
-                    }
-                };
-                ipcRenderer.on('clearLibrary', (event, data) => {
-                    console.log("helloworld?")
-                    var element = document.getElementById("grid");
-                    while (element.firstChild.id != "add-game") {
-                        element
-                            .firstChild
-                            .remove();
-                    }
-                });
-                ipcRenderer.on('addgame', (event, data) => {
-                    cachedLibrary[data.id] = {
-                        id: data.id,
-                        name: data.name,
-                        author: data.author,
-                        year: data.year,
-                        cover: data.cover,
-                        sourceport: data.sourceport || "Default",
-                        iwad: data.iwad || "Unknown",
-                        params: data.params || "Default parameters",
-                        description: data.description || null
-                    };
-                    var game = document.createElement("div")
-                    game.className = "game"
-                    var image = document.createElement("img")
-                    image.src = data
-                        .cover
-                        game
-                        .appendChild(image)
-                    var h3 = document.createElement("h3")
-                    h3.innerHTML = data.name
-                    var p = document.createElement("p")
-                    p.innerHTML = data.author + ', ' + data
-                        .year
-                        game
-                        .appendChild(h3)
-                    game.appendChild(p)
-                    game.addEventListener("click", seeDetails);
-                    game.setAttribute("gameName", data.id)
-                    document
-                        .getElementById("grid")
-                        .insertBefore(game, document.getElementById("add-game"))
-                });
-
-                function seeDetails(event) {
-                    const gameId = event.currentTarget.getAttribute("gameName");
-                    if (cachedLibrary[gameId]) {
-                        showGameDetail(cachedLibrary[gameId]);
-                    } else {
-                        console.error("Game data not found in cache:", gameId);
-                    }
+            document.onreadystatechange = () => {
+                if (document.readyState == "complete") {
+                    init();
                 }
-
-                function showGameDetails(gameData){
-
+            };
+            ipcRenderer.on('clearLibrary', (event, data) => {
+                console.log("helloworld?")
+                var element = document.getElementById("grid");
+                while (element.firstChild.id != "add-game") {
+                    element
+                        .firstChild
+                        .remove();
                 }
+            });
+            ipcRenderer.on('addgame', (event, data) => {
+                cachedLibrary[data.id] = {
+                    id: data.id,
+                    name: data.name,
+                    author: data.author,
+                    year: data.year,
+                    cover: data.cover,
+                    sourceport: data.sourceport || "Default",
+                    iwad: data.iwad || "Unknown",
+                    params: data.params || "Default parameters",
+                    description: data.description || null
+                };
+                var game = document.createElement("div")
+                game.className = "game"
+                var image = document.createElement("img")
+                image.src = data
+                    .cover
+                game
+                    .appendChild(image)
+                var h3 = document.createElement("h3")
+                h3.innerHTML = data.name
+                var p = document.createElement("p")
+                p.innerHTML = data.author + ', ' + data
+                    .year
+                game
+                    .appendChild(h3)
+                game.appendChild(p)
+                game.addEventListener("click", seeDetails);
+                game.setAttribute("gameName", data.id)
+                document
+                    .getElementById("grid")
+                    .insertBefore(game, document.getElementById("add-game"))
+            });
 
-            })();
-        </script>
-    </body>
+            function seeDetails(event) {
+                const gameId = event.currentTarget.getAttribute("gameName");
+                if (cachedLibrary[gameId]) {
+                    showGameDetail(cachedLibrary[gameId]);
+                } else {
+                    console.error("Game data not found in cache:", gameId);
+                }
+            }
+
+            function showGameDetail(gameData) {
+                document.getElementById("gameDetail").classList.add("slide-in")
+            }
+
+            function hideGameDetail() {
+                document.getElementById("gameDetail").classList.remove("slide-in")
+            }
+
+        })();
+    </script>
+</body>
+
 </html>
