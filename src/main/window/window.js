@@ -16,7 +16,16 @@ function createMainWindow() {
             nodeIntegration: true,
             contextIsolation: false,
             enableRemoteModule: true
-        }
+        },
+        frame: false, // this is a requirement for transparent windows it seems
+        show: true,
+        blur: true,
+        blurType: "blurbehind",
+        blurGnomeSigma: 100,
+        blurCornerRadius: 20,
+        vibrancy: "fullscreen-ui",
+        frame: false,
+        transparent: true
     })
     mainWindow.loadURL(url.format({
         pathname: path.join(app.getAppPath(), 'src/static/index.html'),
@@ -28,7 +37,7 @@ function createMainWindow() {
         mainWindow.show()
         library.updateLibrary(mainWindow);
         cfg = config.getConfig();
-        //config.configWindow(cfg); //temporarily disabled, re-enable later
+        config.configWindow(cfg);
     })
 
     mainWindow.on('closed', function () {
