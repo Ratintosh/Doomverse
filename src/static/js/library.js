@@ -4,16 +4,6 @@
     let gameDetailCache = {}; // Store game data for detail view
 
     function init() {
-        // Close app
-        document.getElementById("close-btn").addEventListener("click", (e) => {
-            ipcRenderer.send('close-me')
-        });
-        document.getElementById("max-btn").addEventListener("click", (e) => {
-            ipcRenderer.send('max-me')
-        });
-        document.getElementById("min-btn").addEventListener("click", (e) => {
-            ipcRenderer.send('min-me')
-        });
         document.getElementById("add-game").addEventListener("click", (e) => {
             ipcRenderer.send('requestWizard')
         });
