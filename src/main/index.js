@@ -53,6 +53,6 @@ app.once('ready', () => {
         Check for Updates: If your mod loader has an update system, notify the user about new versions.
         Show a Splash Screen: Optionally, display a loading animation while performing background tasks.
     */
-    createConfigWindow();
+    //createConfigWindow();
     createMainWindow();
 });
