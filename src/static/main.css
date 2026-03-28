@@ -15,7 +15,7 @@ body {
     padding: 0px;
     margin: 0px;
     user-select: none; /* Standard syntax */
-    /*background-color: #21212462;*/
+    background-color: #212124;
 }
 
 .ctrl {
@@ -102,7 +102,6 @@ body {
 }
 
 .main {
-    margin-left: 300px; /* Same as the width of the sidenav */
     font-size: 18px; /* Increased text to enable scrolling */
     padding: 0px 10px;
     color: var(--font-color);

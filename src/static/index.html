@@ -20,16 +20,6 @@
             // Retrieve remote BrowserWindow
             const {ipcRenderer} = require('electron');
             function init() {
-                // Close app
-                document.getElementById("close-btn").addEventListener("click", (e) => {
-                    ipcRenderer.send('close-me')
-                });
-                document.getElementById("max-btn").addEventListener("click", (e) => {
-                    ipcRenderer.send('max-me')
-                });
-                document.getElementById("min-btn").addEventListener("click", (e) => {
-                    ipcRenderer.send('min-me')
-                });
                 document.getElementById("add").addEventListener("click", (e) => {
                     let formInputs = document.querySelectorAll("input");
                     console.log(formInputs);
@@ -62,14 +52,15 @@
                 p.innerHTML = data.author + ', ' + data.year
                 game.appendChild(h3)
                 game.appendChild(p)
-                game.addEventListener("click", launchGame); 
+                game.addEventListener("click", seeDetails); 
                 game.setAttribute("gameName",data.id)
                 document.getElementById("grid").insertBefore(game, document.getElementById("add-game"))
             });
 
-            function launchGame(event){
-                gamename = event.currentTarget.getAttribute("gameName")
-                ipcRenderer.send('launchGame',gamename)
+            function seeDetails(event){
+                alert("SEE DETAILS")
+                //gamename = event.currentTarget.getAttribute("gameName")
+                //ipcRenderer.send('launchGame',gamename)
             }
             
         
